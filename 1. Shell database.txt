@@ -1,0 +1,50 @@
+1. Shell database
+
+#!/bin/bash
+
+DB_FILE="students.txt"
+
+# Ensure database file exists
+touch $DB_FILE
+
+while true; do
+    echo "-------- Student Database Menu --------"
+    echo "1. Add Student"
+    echo "2. Display All Students"
+    echo "3. Search Student by Roll Number"
+    echo "4. Exit"
+    echo "Enter your choice:"
+    read choice
+
+    case $choice in
+        1)
+            echo "Enter Roll Number:"
+            read roll
+            echo "Enter Name:"
+            read name
+            echo "Enter Age:"
+            read age
+            echo "Enter Marks:"
+            read marks
+            echo "$roll,$name,$age,$marks" >> $DB_FILE
+            echo "Student added successfully!"
+            ;;
+        2)
+            echo "------ All Student Records ------"
+            column -t -s, $DB_FILE
+            ;;
+        3)
+            echo "Enter Roll Number to Search:"
+            read roll
+            awk -F',' -v r="$roll" '$1==r { print "Roll:", $1, "\nName:", $2, "\nAge:", $3, "\nMarks:", $4 }' $DB_FILE
+            ;;
+        4)
+            echo "Exiting..."
+            break
+            ;;
+        *)
+            echo "Invalid choice. Try again."
+            ;;
+    esac
+    echo ""
+done
